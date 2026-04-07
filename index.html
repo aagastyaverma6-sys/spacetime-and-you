@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Orbit Tracker</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <h1>🚀 Space Orbit Tracker</h1>
+    <ul>
+      <li><a href="#stats">Stats</a></li>
+      <li><a href="#orbits">Orbits</a></li>
+      <li><a href="#types">Satellites</a></li>
+      <li><a href="#chart">Chart</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </nav>
+
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star star2"></div>
+  <div class="cursor-glow"></div>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p class="tag">SCIENCE PROJECT • FUTURISTIC UI • SPACE DATA</p>
+      <h2>How Crowded is <span>Space</span> Around Earth?</h2>
+      <p>
+        Rockets launched into space leave behind satellites, rocket bodies,
+        and dangerous debris. This project shows how Earth’s orbit is becoming crowded.
+      </p>
+      <div class="hero-buttons">
+        <button onclick="document.getElementById('stats').scrollIntoView({behavior:'smooth'})">Explore</button>
+        <button class="ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+      </div>
+    </div>
+
+    <div class="earth-container">
+      <div class="orbit-ring orbit1"><div class="satellite sat1"></div></div>
+      <div class="orbit-ring orbit2"><div class="satellite sat2"></div></div>
+      <div class="orbit-ring orbit3"><div class="satellite sat3"></div></div>
+      <div class="earth"></div>
+      <div class="moon"></div>
+    </div>
+  </section>
+
+  <section id="stats">
+    <h2 class="section-title">Space Statistics</h2>
+    <div class="stats-grid">
+      <div class="card"><h3>Total Satellites</h3><div class="number" data-target="10000">0</div></div>
+      <div class="card"><h3>Active Satellites</h3><div class="number" data-target="5000">0</div></div>
+      <div class="card"><h3>Inactive Satellites</h3><div class="number" data-target="3000">0</div></div>
+      <div class="card"><h3>Tracked Debris</h3><div class="number" data-target="30000">0</div></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">Why is Space Getting Crowded?</h2>
+    <div class="about-grid">
+      <div class="glass-card">
+        <p>
+          Every rocket launch can place useful satellites into orbit, but it can also
+          leave behind broken parts and old rocket stages.
+        </p>
+      </div>
+      <div class="glass-card">
+        <p>
+          Over time, these objects collect around Earth and become “space junk,”
+          increasing the risk of collisions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="orbits">
+    <h2 class="section-title">Types of Earth Orbits</h2>
+    <div class="orbit-grid">
+      <div class="orbit-card">
+        <h3>LEO</h3>
+        <p>Low Earth Orbit – used for imaging, ISS, and many internet satellites.</p>
+      </div>
+      <div class="orbit-card">
+        <h3>MEO</h3>
+        <p>Medium Earth Orbit – mostly used for navigation systems like GPS.</p>
+      </div>
+      <div class="orbit-card">
+        <h3>GEO</h3>
+        <p>Geostationary Orbit – used for TV, communication, and weather satellites.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="types">
+    <h2 class="section-title">Types of Satellites</h2>
+    <div class="types-grid">
+      <div class="type-card"><h4>📡 Communication</h4><p>Internet, TV, phone signals</p></div>
+      <div class="type-card"><h4>🌦 Weather</h4><p>Rain, storms, climate tracking</p></div>
+      <div class="type-card"><h4>🧭 Navigation</h4><p>GPS and location systems</p></div>
+      <div class="type-card"><h4>🔬 Scientific</h4><p>Research and experiments</p></div>
+      <div class="type-card"><h4>🛡 Military</h4><p>Security and surveillance</p></div>
+      <div class="type-card"><h4>🌍 Observation</h4><p>Earth and disaster monitoring</p></div>
+    </div>
+  </section>
+
+  <section id="chart">
+    <h2 class="section-title">Satellite Launch Contribution</h2>
+    <div class="chart-box">
+      <canvas id="launchChart"></canvas>
+    </div>
+  </section>
+
+  <section id="facts">
+    <h2 class="section-title">Did You Know?</h2>
+    <div class="fact-slider">
+      <div class="fact-card active">🛰️ A satellite can travel at around <b>28,000 km/h</b>.</div>
+      <div class="fact-card">☄️ Tiny space junk can damage spacecraft.</div>
+      <div class="fact-card">📍 GPS works because of satellites orbiting Earth.</div>
+      <div class="fact-card">🌍 Some debris can stay in orbit for years.</div>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <h2 class="section-title">Mini Space Quiz</h2>
+    <div class="quiz-box">
+
+      <div class="quiz-question">
+        <p>1. Which orbit is mostly used for GPS?</p>
+        <button onclick="checkAnswer(this, false)">LEO</button>
+        <button onclick="checkAnswer(this, true)">MEO</button>
+        <button onclick="checkAnswer(this, false)">GEO</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>2. What is space junk?</p>
+        <button onclick="checkAnswer(this, false)">Only stars</button>
+        <button onclick="checkAnswer(this, true)">Old satellites and broken parts</button>
+        <button onclick="checkAnswer(this, false)">Clouds in space</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>3. Which orbit appears fixed above Earth?</p>
+        <button onclick="checkAnswer(this, false)">LEO</button>
+        <button onclick="checkAnswer(this, false)">MEO</button>
+        <button onclick="checkAnswer(this, true)">GEO</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>4. Which planet is known as the Red Planet?</p>
+        <button onclick="checkAnswer(this, true)">Mars</button>
+        <button onclick="checkAnswer(this, false)">Venus</button>
+        <button onclick="checkAnswer(this, false)">Jupiter</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>5. What does GPS stand for?</p>
+        <button onclick="checkAnswer(this, true)">Global Positioning System</button>
+        <button onclick="checkAnswer(this, false)">Galaxy Power Signal</button>
+        <button onclick="checkAnswer(this, false)">Geo Planet Station</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>6. Which satellite type helps predict weather?</p>
+        <button onclick="checkAnswer(this, false)">Military</button>
+        <button onclick="checkAnswer(this, true)">Weather</button>
+        <button onclick="checkAnswer(this, false)">Navigation</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>7. What is the Moon?</p>
+        <button onclick="checkAnswer(this, false)">A star</button>
+        <button onclick="checkAnswer(this, true)">Earth’s natural satellite</button>
+        <button onclick="checkAnswer(this, false)">A comet</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>8. Which planet has the famous rings?</p>
+        <button onclick="checkAnswer(this, false)">Mars</button>
+        <button onclick="checkAnswer(this, true)">Saturn</button>
+        <button onclick="checkAnswer(this, false)">Mercury</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>9. What keeps satellites orbiting Earth?</p>
+        <button onclick="checkAnswer(this, true)">Gravity</button>
+        <button onclick="checkAnswer(this, false)">Wind</button>
+        <button onclick="checkAnswer(this, false)">Clouds</button>
+      </div>
+
+      <div class="quiz-question">
+        <p>10. Which space agency belongs to India?</p>
+        <button onclick="checkAnswer(this, false)">NASA</button>
+        <button onclick="checkAnswer(this, true)">ISRO</button>
+        <button onclick="checkAnswer(this, false)">ESA</button>
+      </div>
+
+      <div class="quiz-result" id="quizResult">Your Space IQ: 0/10</div>
+    </div>
+  </section>
+
+  <div class="chatbot-toggle" onclick="toggleChatbot()">💬</div>
+
+  <div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+      <span>🚀 SpaceBot AI</span>
+      <span onclick="toggleChatbot()">✖</span>
+    </div>
+
+    <div id="chat-box" class="chat-box">
+      <div class="bot-message">Hello Explorer! 🌌 Ask me anything about space.</div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" id="user-input" placeholder="Ask about planets, stars, black holes..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    🚀 Space Orbit Tracker | School Science Project
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
