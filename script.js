@@ -1,6 +1,6 @@
-// =========================
+// ===============================
 // COUNTER ANIMATION
-// =========================
+// ===============================
 const counters = document.querySelectorAll(".number");
 
 counters.forEach((counter) => {
@@ -10,7 +10,7 @@ counters.forEach((counter) => {
     const increment = Math.ceil(target / 100);
 
     if (current < target) {
-      counter.innerText = (current + increment).toLocaleString();
+      counter.innerText = current + increment;
       setTimeout(updateCounter, 25);
     } else {
       counter.innerText = target.toLocaleString() + "+";
@@ -19,11 +19,10 @@ counters.forEach((counter) => {
   updateCounter();
 });
 
-// =========================
+// ===============================
 // CURSOR GLOW
-// =========================
+// ===============================
 const glow = document.querySelector(".cursor-glow");
-
 document.addEventListener("mousemove", (e) => {
   if (glow) {
     glow.style.left = e.clientX + "px";
@@ -31,9 +30,9 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-// =========================
+// ===============================
 // FACTS SLIDER
-// =========================
+// ===============================
 const facts = document.querySelectorAll(".fact-card");
 let factIndex = 0;
 
@@ -45,11 +44,11 @@ if (facts.length > 0) {
   }, 3000);
 }
 
-// =========================
-// QUIZ SYSTEM
-// =========================
+// ===============================
+// QUIZ
+// ===============================
 let score = 0;
-let totalQuestions = document.querySelectorAll(".quiz-question").length;
+const totalQuestions = 10;
 
 function checkAnswer(button, isCorrect) {
   const question = button.parentElement;
@@ -69,33 +68,293 @@ function checkAnswer(button, isCorrect) {
   } else {
     button.classList.add("wrong");
     buttons.forEach((btn) => {
-      if (
-        btn.getAttribute("onclick") &&
-        btn.getAttribute("onclick").includes("true")
-      ) {
+      const clickCode = btn.getAttribute("onclick");
+      if (clickCode && clickCode.includes("true")) {
         btn.classList.add("correct");
       }
     });
   }
 
-  const quizResult = document.getElementById("quizResult");
-  if (quizResult) {
-    quizResult.innerText = `Your Space IQ: ${score}/${totalQuestions}`;
+  document.getElementById("quizResult").innerText = `Your Space IQ: ${score}/${totalQuestions}`;
+}
+
+// ===============================
+// AI DEBRIS ANALYZER
+// ===============================
+function calculateDebrisRisk() {
+  const size = document.getElementById("debrisSize").value;
+  const orbit = document.getElementById("debrisOrbit").value;
+  const speed = document.getElementById("debrisSpeed").value;
+  const material = document.getElementById("debrisMaterial").value;
+  const nearby = document.getElementById("debrisNearby").value;
+
+  let risk = 0;
+
+  // Size weight
+  if (size === "small") risk += 15;
+  if (size === "medium") risk += 30;
+  if (size === "large") risk += 45;
+
+  // Orbit weight
+  if (orbit === "leo") risk += 25;
+  if (orbit === "meo") risk += 15;
+  if (orbit === "geo") risk += 10;
+
+  // Speed weight
+  if (speed === "low") risk += 10;
+  if (speed === "medium") risk += 20;
+  if (speed === "high") risk += 35;
+
+  // Material weight
+  if (material === "metal") risk += 15;
+  if (material === "nonmetal") risk += 8;
+
+  // Nearby active satellite
+  if (nearby === "yes") risk += 30;
+  if (nearby === "no") risk += 5;
+
+  if (risk > 100) risk = 100;
+
+  let level = "";
+  let method = "";
+  let priority = "";
+  let mission = "";
+
+  if (risk <= 30) {
+    level = "Low";
+    method = "Track and monitor";
+    priority = "Low Priority";
+    mission = "No urgent cleanup required. Continue orbital observation.";
+  } else if (risk <= 60) {
+    level = "Moderate";
+    method = material === "metal" ? "Magnetic Collector" : "Capture Net";
+    priority = "Medium Priority";
+    mission = "Object should be added to future cleanup planning.";
+  } else if (risk <= 85) {
+    level = "High";
+    method = size === "large" ? "Robotic Arm" : "Hunter Drone";
+    priority = "High Priority";
+    mission = "Recommended for targeted removal mission.";
+  } else {
+    level = "Critical";
+    method = size === "large" ? "Robotic Arm + Drag Sail" : "Hunter Drone + Net";
+    priority = "Immediate Action";
+    mission = "Dangerous object. AI recommends urgent cleanup action.";
+  }
+
+  const riskFill = document.getElementById("riskFill");
+  const calcResult = document.getElementById("calcResult");
+
+  if (riskFill) riskFill.style.width = risk + "%";
+
+  if (calcResult) {
+    calcResult.innerHTML = `
+      <h3>Threat Analysis Result</h3>
+      <p><b>Risk Score:</b> ${risk}%</p>
+      <p><b>Threat Level:</b> ${level}</p>
+      <p><b>Recommended Method:</b> ${method}</p>
+      <p><b>Removal Priority:</b> ${priority}</p>
+      <p><b>AI Mission Suggestion:</b> ${mission}</p>
+    `;
   }
 }
 
-// =========================
-// LOAD CHART.JS
-// =========================
+// ===============================
+// FUTURE SIMULATOR
+// ===============================
+function showFuture(years) {
+  const futureResult = document.getElementById("futureResult");
+  if (!futureResult) return;
+
+  let result = "";
+
+  if (years === 5) {
+    result = `
+      <h3>5 Years Later</h3>
+      <p>Orbital traffic increases and collision alerts become more common.</p>
+      <p>LEO may become more crowded due to internet and observation satellites.</p>
+      <p>Cleanup planning becomes more important for safe launches.</p>
+    `;
+  } else if (years === 10) {
+    result = `
+      <h3>10 Years Later</h3>
+      <p>Inactive satellites and debris may create serious route management problems.</p>
+      <p>More fuel and planning will be needed for safe satellite placement.</p>
+      <p>Space missions could become costlier and riskier.</p>
+    `;
+  } else if (years === 20) {
+    result = `
+      <h3>20 Years Later</h3>
+      <p>If debris is ignored, repeated collisions may create even more debris.</p>
+      <p>This can lead to severe orbital congestion and mission failures.</p>
+      <p>AI-based cleanup and prevention systems may become essential for future space travel.</p>
+    `;
+  }
+
+  futureResult.innerHTML = result;
+}
+
+// ===============================
+// SPACE AI CHATBOT TRAINING
+// ===============================
+function askBot() {
+  const input = document.getElementById("userInput");
+  const chatWindow = document.getElementById("chatWindow");
+
+  if (!input || !chatWindow) return;
+
+  const userText = input.value.trim();
+  if (userText === "") return;
+
+  // Add user message
+  const userMsg = document.createElement("div");
+  userMsg.className = "user-message";
+  userMsg.innerText = userText;
+  chatWindow.appendChild(userMsg);
+
+  const lower = userText.toLowerCase();
+  let reply = "";
+
+  // ===============================
+  // TRAINED SPACE QUESTIONS
+  // ===============================
+
+  if (lower.includes("what is leo") || lower === "leo" || lower.includes("low earth orbit")) {
+    reply = "LEO means Low Earth Orbit. It is the region closest to Earth where many satellites, the ISS, and imaging systems are placed. It is also the most crowded orbit.";
+  }
+
+  else if (lower.includes("what is meo") || lower === "meo" || lower.includes("medium earth orbit")) {
+    reply = "MEO means Medium Earth Orbit. It is mainly used for navigation systems like GPS because it provides wide coverage and stable positioning.";
+  }
+
+  else if (lower.includes("what is geo") || lower === "geo" || lower.includes("geostationary orbit")) {
+    reply = "GEO means Geostationary Orbit. A satellite in GEO appears fixed above one point on Earth because it moves at the same rate as Earth’s rotation.";
+  }
+
+  else if (lower.includes("what is space debris") || lower.includes("space junk") || lower === "debris") {
+    reply = "Space debris is made of non-working satellites, broken rocket parts, paint flakes, and fragments from collisions. Even small debris is dangerous because it moves at very high speed.";
+  }
+
+  else if (lower.includes("why is debris dangerous")) {
+    reply = "Debris is dangerous because in orbit, speed matters more than size. Even a tiny fragment can damage a satellite or spacecraft due to its huge kinetic energy.";
+  }
+
+  else if (lower.includes("what is orbital decay")) {
+    reply = "Orbital decay happens when a satellite slowly loses altitude due to atmospheric drag or other forces, causing it to move closer to Earth over time.";
+  }
+
+  else if (lower.includes("what is collision risk")) {
+    reply = "Collision risk means the chance that two objects in orbit may hit each other. This becomes more serious when many objects move through the same orbital path.";
+  }
+
+  else if (lower.includes("why is leo crowded")) {
+    reply = "LEO is crowded because it is easier and cheaper to reach. Many Earth observation, communication, and internet satellites are launched there.";
+  }
+
+  else if (lower.includes("how can we clean space debris") || lower.includes("clean debris")) {
+    reply = "Space debris can be reduced using robotic arms, magnetic collectors, drag sails, capture nets, or AI-powered cleanup satellites. The best method depends on size, orbit, and material.";
+  }
+
+  else if (lower.includes("what is kessler syndrome") || lower.includes("kessler")) {
+    reply = "Kessler Syndrome is a chain reaction in space where one collision creates more debris, which can cause more collisions and make orbit increasingly dangerous.";
+  }
+
+  else if (lower.includes("what is escape velocity")) {
+    reply = "Escape velocity is the minimum speed needed for an object to leave Earth’s gravitational pull without needing extra propulsion. For Earth, it is about 11.2 km/s.";
+  }
+
+  else if (lower.includes("why do satellites not fall")) {
+    reply = "Satellites are constantly falling toward Earth, but they move forward so fast that they keep missing the ground. This balance creates orbit.";
+  }
+
+  else if (lower.includes("difference between satellite and debris")) {
+    reply = "A satellite is a useful object placed in orbit for a purpose, while debris is an unwanted object that no longer serves a mission and may create danger.";
+  }
+
+  else if (lower.includes("how does gps work")) {
+    reply = "GPS works by using signals from multiple satellites in MEO. A receiver compares signal times to calculate its exact position on Earth.";
+  }
+
+  else if (lower.includes("why is geo useful")) {
+    reply = "GEO is useful because a satellite there stays above the same region of Earth, making it ideal for TV broadcasting, communication, and weather observation.";
+  }
+
+  else if (lower.includes("what is a dead satellite")) {
+    reply = "A dead satellite is a satellite that no longer works or has completed its mission. It may remain in orbit and become part of space debris if not removed safely.";
+  }
+
+  else if (lower.includes("what is orbital speed")) {
+    reply = "Orbital speed is the speed needed for an object to stay in orbit. In lower orbits, satellites need higher speeds because Earth’s gravity is stronger there.";
+  }
+
+  else if (lower.includes("how ai helps in space")) {
+    reply = "AI helps in space by tracking debris, predicting collisions, planning safe satellite paths, detecting risk zones, and selecting cleanup priorities more efficiently.";
+  }
+
+  else if (lower.includes("why should we protect earth orbit")) {
+    reply = "Earth’s orbit should be protected because modern communication, GPS, weather systems, research, and future space missions all depend on safe orbital regions.";
+  }
+
+  else if (lower.includes("who made this project")) {
+    reply = "This project is designed as an AI-based orbital defense and debris cleanup system to study space safety in a smart and futuristic way.";
+  }
+
+  else if (lower.includes("what is the purpose of this project")) {
+    reply = "The purpose of this project is to understand space debris, detect orbital danger, suggest cleanup methods, and show how AI can help keep Earth’s orbit safer.";
+  }
+
+  else if (lower.includes("hard question") || lower.includes("give me hard questions")) {
+    reply = "Try this: Why can a very small debris particle still damage a satellite badly? Answer: because its high orbital speed gives it large kinetic energy.";
+  }
+
+  else if (lower.includes("hello") || lower === "hi" || lower === "hey") {
+    reply = "Hello.";
+  }
+
+  else {
+    const smartReplies = [
+      "That is related to orbital science. Try asking about satellites, debris, orbit safety, GPS, or collision risk.",
+      "Interesting question. In this project, I mainly focus on satellites, orbits, debris, and AI-based space safety.",
+      "I can help with space debris, orbital motion, satellites, Earth orbits, and cleanup systems.",
+      "Try asking something like: Why do satellites stay in orbit? or How can space debris be removed?"
+    ];
+
+    reply = smartReplies[Math.floor(Math.random() * smartReplies.length)];
+  }
+
+  setTimeout(() => {
+    const botMsg = document.createElement("div");
+    botMsg.className = "bot-message";
+    botMsg.innerText = reply;
+    chatWindow.appendChild(botMsg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }, 500);
+
+  input.value = "";
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+// Enter key support
+const userInput = document.getElementById("userInput");
+if (userInput) {
+  userInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      askBot();
+    }
+  });
+}
+
+// ===============================
+// CHART.JS
+// ===============================
 const script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/chart.js";
 
 script.onload = () => {
-  const canvas = document.getElementById("launchChart");
+  const chartCanvas = document.getElementById("launchChart");
+  if (!chartCanvas) return;
 
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
+  const ctx = chartCanvas.getContext("2d");
 
   new Chart(ctx, {
     type: "bar",
@@ -137,343 +396,27 @@ script.onload = () => {
     }
   });
 };
+const container = document.getElementById("dynamicDebris");
 
+if (container) {
+  for (let i = 0; i < 12; i++) {
+    const dot = document.createElement("div");
+    dot.className = "dynamic-dot";
+
+    dot.style.left = Math.random() * 100 + "%";
+    dot.style.top = Math.random() * 100 + "%";
+
+    container.appendChild(dot);
+  }
+
+  const dots = document.querySelectorAll(".dynamic-dot");
+
+  setInterval(() => {
+    dots.forEach(dot => {
+      const x = Math.random() * 80 - 40;
+      const y = Math.random() * 80 - 40;
+      dot.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  }, 2000);
+}
 document.head.appendChild(script);
-
-// =========================
-// CHATBOT TOGGLE
-// =========================
-function toggleChatbot() {
-  const chatbot = document.getElementById("chatbot");
-  if (!chatbot) return;
-
-  if (chatbot.style.display === "flex") {
-    chatbot.style.display = "none";
-  } else {
-    chatbot.style.display = "flex";
-  }
-}
-
-// =========================
-// CHATBOT ELEMENTS
-// =========================
-const chatBox = document.getElementById("chat-box");
-const userInput = document.getElementById("user-input");
-const sendBtn = document.getElementById("send-btn");
-
-// =========================
-// ADD MESSAGE
-// =========================
-function addMessage(text, sender) {
-  if (!chatBox) return;
-
-  const msg = document.createElement("div");
-  msg.classList.add(sender === "user" ? "user-message" : "bot-message");
-  msg.textContent = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// =========================
-// SMART CLASS 9 SPACE CHATBOT
-// =========================
-function getBotReply(message) {
-  const msg = message.toLowerCase().trim();
-
-  // GREETINGS
-  if (msg.includes("hello") || msg.includes("hi") || msg.includes("hey")) {
-    return "Hello Explorer! 🚀 I am SpaceBot. Ask me Class 9 level questions about planets, gravity, satellites, black holes, orbits, or space science.";
-  }
-
-  // SOLAR SYSTEM
-  if (msg.includes("solar system")) {
-    return "The Solar System is made up of the Sun, 8 planets, their moons, asteroids, comets, and other celestial bodies that revolve around the Sun due to gravity.";
-  }
-
-  if (msg.includes("how many planets")) {
-    return "There are 8 planets in the Solar System: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune.";
-  }
-
-  if (msg.includes("why do planets revolve around the sun")) {
-    return "Planets revolve around the Sun because of the Sun’s gravitational pull. Their forward motion and gravity together create a stable orbit.";
-  }
-
-  // GRAVITY
-  if (msg.includes("gravity")) {
-    return "Gravity is the force of attraction between any two objects having mass. It keeps planets in orbit and pulls objects toward Earth.";
-  }
-
-  if (msg.includes("why do objects fall on earth")) {
-    return "Objects fall on Earth because Earth exerts gravitational force that pulls everything toward its center.";
-  }
-
-  if (msg.includes("escape velocity")) {
-    return "Escape velocity is the minimum speed needed for an object to leave a planet’s gravitational field. For Earth, it is about 11.2 km/s.";
-  }
-
-  if (msg.includes("weight on moon") || msg.includes("why is weight less on moon")) {
-    return "Weight is less on the Moon because the Moon has weaker gravity than Earth. Mass stays the same, but weight decreases.";
-  }
-
-  // PLANETS
-  if (msg.includes("largest planet") || msg.includes("biggest planet")) {
-    return "Jupiter is the largest planet in the Solar System. It is a gas giant and has many moons.";
-  }
-
-  if (msg.includes("smallest planet")) {
-    return "Mercury is the smallest planet in the Solar System and the closest to the Sun.";
-  }
-
-  if (msg.includes("red planet")) {
-    return "Mars is called the Red Planet because iron oxide on its surface gives it a reddish appearance.";
-  }
-
-  if (msg.includes("hottest planet")) {
-    return "Venus is the hottest planet because its thick carbon dioxide atmosphere traps heat through the greenhouse effect.";
-  }
-
-  if (msg.includes("why is venus hottest")) {
-    return "Venus is the hottest planet because its dense atmosphere traps heat and creates an extreme greenhouse effect.";
-  }
-
-  if (msg.includes("which planet has rings") || msg.includes("planet with rings")) {
-    return "Saturn is the most famous ringed planet, although Jupiter, Uranus, and Neptune also have rings.";
-  }
-
-  if (msg.includes("why is mars important")) {
-    return "Mars is important because scientists believe it may have had water in the past, making it useful for studying possible life.";
-  }
-
-  // EARTH / MOON
-  if (msg === "earth" || msg.includes("what is earth") || msg.includes("tell me about earth")) {
-    return "Earth is the third planet from the Sun and the only known planet that supports life because it has water, oxygen, and a suitable temperature.";
-  }
-
-  if (msg === "moon" || msg.includes("what is moon") || msg.includes("tell me about moon")) {
-    return "The Moon is Earth’s natural satellite. It revolves around Earth and reflects sunlight.";
-  }
-
-  if (msg.includes("phases of moon")) {
-    return "The phases of the Moon happen because as the Moon revolves around Earth, we see different portions of its sunlit side.";
-  }
-
-  if (msg.includes("why does the moon shine")) {
-    return "The Moon shines because it reflects sunlight. It does not produce its own light.";
-  }
-
-  if (msg.includes("why there is no sound in space")) {
-    return "There is no sound in space because sound needs a medium like air to travel, and space is mostly a vacuum.";
-  }
-
-  // STARS / SUN
-  if (msg.includes("what is a star")) {
-    return "A star is a massive ball of hot gases, mainly hydrogen and helium, that produces its own heat and light.";
-  }
-
-  if (msg === "sun" || msg.includes("what is sun") || msg.includes("tell me about sun")) {
-    return "The Sun is a star at the center of the Solar System. It provides heat and light to the planets.";
-  }
-
-  if (msg.includes("why does the sun shine")) {
-    return "The Sun shines because nuclear fusion occurs in its core, where hydrogen atoms combine to form helium and release energy.";
-  }
-
-  if (msg.includes("nuclear fusion")) {
-    return "Nuclear fusion is the process in which light atoms like hydrogen combine to form helium, releasing a large amount of energy.";
-  }
-
-  if (msg.includes("difference between planet and star")) {
-    return "A star produces its own light and heat, while a planet does not. Planets revolve around stars and reflect their light.";
-  }
-
-  // GALAXY / UNIVERSE
-  if (msg.includes("galaxy")) {
-    return "A galaxy is a huge collection of stars, planets, gas, dust, and dark matter held together by gravity. Our Solar System lies in the Milky Way.";
-  }
-
-  if (msg.includes("milky way")) {
-    return "The Milky Way is the galaxy that contains our Solar System. It has billions of stars and is spiral in shape.";
-  }
-
-  if (msg.includes("universe")) {
-    return "The universe includes everything that exists: all galaxies, stars, planets, matter, energy, and space itself.";
-  }
-
-  // BLACK HOLE
-  if (msg.includes("black hole")) {
-    return "A black hole is a region in space where gravity is so strong that even light cannot escape.";
-  }
-
-  if (msg.includes("how are black holes formed")) {
-    return "Black holes are usually formed when a very massive star collapses under its own gravity after using up its nuclear fuel.";
-  }
-
-  // SATELLITES / ORBITS
-  if (msg.includes("satellite")) {
-    return "A satellite is an object that revolves around a planet. It can be natural like the Moon or artificial like communication satellites.";
-  }
-
-  if (msg.includes("natural satellite")) {
-    return "A natural satellite is a naturally occurring object that revolves around a planet, like the Moon around Earth.";
-  }
-
-  if (msg.includes("artificial satellite")) {
-    return "An artificial satellite is a human-made object launched into orbit for communication, weather, navigation, or research.";
-  }
-
-  if (msg.includes("why do satellites not fall")) {
-    return "Satellites do fall toward Earth due to gravity, but they also move forward at very high speed, so they keep missing Earth and continue orbiting it.";
-  }
-
-  if (msg.includes("orbit")) {
-    return "An orbit is the curved path followed by a planet, moon, or satellite around another object because of gravity.";
-  }
-
-  if (msg.includes("leo")) {
-    return "LEO means Low Earth Orbit. It is used for Earth observation, the ISS, and many internet satellites.";
-  }
-
-  if (msg.includes("meo")) {
-    return "MEO means Medium Earth Orbit. It is commonly used for navigation satellites like GPS.";
-  }
-
-  if (msg.includes("geo")) {
-    return "GEO means Geostationary Orbit. Satellites here appear fixed over one point on Earth.";
-  }
-
-  if (msg.includes("why geo satellites appear stationary")) {
-    return "GEO satellites appear stationary because they revolve around Earth in exactly 24 hours, matching Earth’s rotation.";
-  }
-
-  // SPACE JUNK
-  if (msg.includes("space junk") || msg.includes("space debris")) {
-    return "Space junk refers to non-working satellites, broken rocket parts, and fragments left in orbit. These can collide with active spacecraft.";
-  }
-
-  if (msg.includes("why space junk is dangerous")) {
-    return "Space junk is dangerous because even tiny fragments move at extremely high speed and can damage satellites or spacecraft.";
-  }
-
-  // GPS / TECH
-  if (msg === "gps" || msg.includes("what is gps")) {
-    return "GPS stands for Global Positioning System. It uses satellites to determine exact location on Earth.";
-  }
-
-  if (msg.includes("how gps works")) {
-    return "GPS works by receiving signals from multiple satellites and calculating the time taken by those signals to reach a receiver.";
-  }
-
-  if (msg.includes("communication satellite")) {
-    return "Communication satellites are used to transmit TV, internet, phone, and radio signals over long distances.";
-  }
-
-  if (msg.includes("weather satellite")) {
-    return "Weather satellites are used to observe clouds, storms, rainfall, and climate changes from space.";
-  }
-
-  // SPACE AGENCIES
-  if (msg.includes("nasa")) {
-    return "NASA stands for National Aeronautics and Space Administration. It is the space agency of the United States.";
-  }
-
-  if (msg.includes("isro")) {
-    return "ISRO stands for Indian Space Research Organisation. It is India’s national space agency.";
-  }
-
-  if (msg.includes("chandrayaan")) {
-    return "Chandrayaan is a series of lunar missions by ISRO. Chandrayaan-3 was important because India successfully landed near the Moon’s south pole.";
-  }
-
-  if (msg.includes("mangalyaan")) {
-    return "Mangalyaan, also called Mars Orbiter Mission, was India’s Mars mission launched by ISRO in 2013.";
-  }
-
-  // ISS / ASTRONAUTS
-  if (msg.includes("iss") || msg.includes("international space station")) {
-    return "The International Space Station is a large space laboratory orbiting Earth where astronauts live and perform experiments.";
-  }
-
-  if (msg.includes("astronaut")) {
-    return "An astronaut is a trained person who travels and works in space.";
-  }
-
-  if (msg.includes("how do astronauts breathe in space")) {
-    return "Astronauts breathe using oxygen supplied through life-support systems inside spacecraft or space stations.";
-  }
-
-  // CLASS 9 HARD QUESTIONS
-  if (msg.includes("why is there no life on mercury")) {
-    return "There is no known life on Mercury because it has almost no atmosphere, extreme temperatures, and no liquid water.";
-  }
-
-  if (msg.includes("why is atmosphere important for life")) {
-    return "Atmosphere is important because it provides gases, controls temperature, and protects living things from harmful radiation.";
-  }
-
-  if (msg.includes("why do seasons occur")) {
-    return "Seasons occur because Earth’s axis is tilted while it revolves around the Sun, causing different parts of Earth to receive different amounts of sunlight.";
-  }
-
-  if (msg.includes("why do day and night occur")) {
-    return "Day and night occur because Earth rotates on its axis. The side facing the Sun has day, while the opposite side has night.";
-  }
-
-  if (msg.includes("rotation and revolution")) {
-    return "Rotation is the spinning of Earth on its axis, while revolution is the movement of Earth around the Sun.";
-  }
-
-  if (msg.includes("difference between asteroid and comet")) {
-    return "Asteroids are rocky bodies mostly found in the asteroid belt, while comets are made of ice, dust, and rock and often form tails near the Sun.";
-  }
-
-  if (msg.includes("why do comets have tails")) {
-    return "Comets develop tails because heat from the Sun causes their ice to vaporize, releasing gas and dust.";
-  }
-
-  // GOODBYE
-  if (msg.includes("bye") || msg.includes("goodbye")) {
-    return "Goodbye Explorer! 🌌 Keep learning about the universe.";
-  }
-
-  // DEFAULT SMART REPLY
-  return "That’s an interesting space question 🚀 Try asking about gravity, black holes, satellites, GPS, Chandrayaan, escape velocity, Moon phases, or why planets revolve around the Sun.";
-}
-
-// =========================
-// SEND MESSAGE
-// =========================
-function handleSend() {
-  if (!userInput) return;
-
-  const message = userInput.value.trim();
-  if (message === "") return;
-
-  addMessage(message, "user");
-  userInput.value = "";
-
-  setTimeout(() => {
-    const reply = getBotReply(message);
-    addMessage(reply, "bot");
-  }, 500);
-}
-
-if (sendBtn) {
-  sendBtn.addEventListener("click", handleSend);
-}
-
-if (userInput) {
-  userInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      handleSend();
-    }
-  });
-}
-
-// =========================
-// SUGGESTED QUESTION BUTTONS (OPTIONAL)
-// =========================
-function askSuggested(question) {
-  if (!userInput) return;
-  userInput.value = question;
-  handleSend();
-}
